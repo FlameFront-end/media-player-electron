@@ -1,0 +1,44 @@
+.wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+
+}
+
+.preview {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 20px;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.time {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.volume {
+  margin-left: auto;
+  max-width: 100px;
+}
+
+.btn_block {
+  margin: 0 auto;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.icons {
+  width: 30px;
+  height: 30px;
+}
+
+.prev {
+  transform: rotate(180deg);
+}
