@@ -1,8 +1,6 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
-
-import next from '../../assets/icons/next.png'
-import pause from '../../assets/icons/pause.png'
-import play from '../../assets/icons/play.png'
+import { PauseCircleOutlined, PlayCircleOutlined } from '@ant-design/icons'
+import { Button, Image, Slider } from 'antd'
+import { FC, useEffect, useRef, useState } from 'react'
 
 import { formatTime } from '../../helpers/formatTime'
 
@@ -27,26 +25,16 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ src, previewImage, title }) => {
 		if (audio) {
 			audio.volume = volume
 
-			audio.addEventListener('timeupdate', () => {
-				setCurrentTime(audio.currentTime)
-			})
-
-			audio.addEventListener('durationchange', () => {
-				setDuration(audio.duration)
-			})
-
-			audio.addEventListener('ended', () => {
+			const updateTime = () => setCurrentTime(audio.currentTime)
+			const updateDuration = () => setDuration(audio.duration)
+			const handleEnded = () => {
 				setIsPlaying(false)
 				setCurrentTime(0)
-			})
-		}
-
-		return () => {
-			if (audio) {
-				audio.removeEventListener('timeupdate', () => {})
-				audio.removeEventListener('durationchange', () => {})
-				audio.removeEventListener('ended', () => {})
 			}
+
+			audio.addEventListener('timeupdate', updateTime)
+			audio.addEventListener('durationchange', updateDuration)
+			audio.addEventListener('ended', handleEnded)
 		}
 	}, [volume])
 
@@ -62,60 +50,57 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ src, previewImage, title }) => {
 		}
 	}
 
-	const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const newTime = parseFloat(e.target.value)
-		setCurrentTime(newTime)
+	const handleTimeChange = (value: number) => {
+		setCurrentTime(value)
 		if (audioRef.current) {
-			audioRef.current.currentTime = newTime
+			audioRef.current.currentTime = value
 		}
 	}
 
-	const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const newVolume = parseFloat(e.target.value)
-		setVolume(newVolume)
+	const handleVolumeChange = (value: number) => {
+		setVolume(value)
 	}
 
 	return (
 		<div className={s.wrapper}>
 			<h2 className={s.title}>{title}</h2>
-			<img src={previewImage} className={s.preview} alt='Track Preview' />
+			<Image
+				src={previewImage}
+				className='audio-player-preview'
+				alt='Track Preview'
+			/>
 			<audio ref={audioRef} src={src}></audio>
 			<div className={s.bottom}>
-				<input
-					type='range'
+				<Slider
 					value={currentTime}
 					max={duration}
 					onChange={handleTimeChange}
 				/>
-				<div className={s.time}>
-					<span>{formatTime(currentTime)}</span>
-					<span>-{formatTime(duration - currentTime)}</span>
+				<div className={s.row}>
+					<div className={s.row_item}>
+						<Button onClick={togglePlayPause}>
+							{isPlaying ? (
+								<PauseCircleOutlined className='audio-player-icons' />
+							) : (
+								<PlayCircleOutlined className='audio-player-icons' />
+							)}
+						</Button>
+						<div className={s.time}>
+							<span>{formatTime(currentTime)}</span>
+							<span>-{formatTime(duration - currentTime)}</span>
+						</div>
+					</div>
+					<div className={s.row_item}>
+						<Slider
+							className={s.volume}
+							value={volume}
+							min={0}
+							max={1}
+							step={0.1}
+							onChange={handleVolumeChange}
+						/>
+					</div>
 				</div>
-
-				<div className={s.btn_block}>
-					<button>
-						<img className={`${s.icons} ${s.prev}`} src={next} alt='prev' />
-					</button>
-					<button onClick={togglePlayPause}>
-						{isPlaying ? (
-							<img className={s.icons} src={pause} alt='pause' />
-						) : (
-							<img className={s.icons} src={play} alt='play' />
-						)}
-					</button>
-					<button>
-						<img className={s.icons} src={next} alt='next' />
-					</button>
-				</div>
-				<input
-					className={s.volume}
-					type='range'
-					value={volume}
-					min={0}
-					max={1}
-					step={0.1}
-					onChange={handleVolumeChange}
-				/>
 			</div>
 		</div>
 	)

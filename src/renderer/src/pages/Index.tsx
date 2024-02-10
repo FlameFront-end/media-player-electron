@@ -1,5 +1,8 @@
+import { Col, Row } from 'antd'
 import axios from 'axios'
 import { FC, useEffect, useState } from 'react'
+
+import '../styles/app.scss'
 
 import { AudioPlayer, PageWrapper, TrackForm } from '../components'
 
@@ -23,22 +26,28 @@ const Home: FC = () => {
 		fetchTracks()
 	}, [])
 
+	const getURLFromAudio = (track: string) => {
+		return `http://localhost:3000/uploads/audio/${track}`
+	}
+
 	return (
 		<PageWrapper>
 			<TrackForm />
 			<div>
 				<h2 className='title'>All Tracks</h2>
-				<div className='wrapper'>
+				<Row gutter={[16, 16]}>
 					{tracks.map(track => (
-						<div className='item' key={track.id}>
-							<AudioPlayer
-								src={track.audio}
-								previewImage={audioImg}
-								title={track.title}
-							/>
-						</div>
+						<Col key={track.id} xs={24} sm={12} md={8} lg={6}>
+							<div>
+								<AudioPlayer
+									src={getURLFromAudio(track.audio)}
+									previewImage={audioImg}
+									title={track.title}
+								/>
+							</div>
+						</Col>
 					))}
-				</div>
+				</Row>
 			</div>
 		</PageWrapper>
 	)

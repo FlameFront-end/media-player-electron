@@ -1,25 +1,16 @@
+import { UploadOutlined } from '@ant-design/icons'
+import { Button, Form, Input, message, Upload } from 'antd'
 import axios from 'axios'
-import React, { useState } from 'react'
+import { FC, useState } from 'react'
 
-interface TrackFormProps {}
+import styles from './TrackForm.module.scss'
 
-const TrackForm: React.FC<TrackFormProps> = () => {
-	const [trackName, setTrackName] = useState<string>('')
+const TrackForm: FC = () => {
+	const [form] = Form.useForm()
 	const [audioFile, setAudioFile] = useState<File | null>(null)
 
-	const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setTrackName(e.target.value)
-	}
-
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files.length > 0) {
-			setAudioFile(e.target.files[0])
-		}
-	}
-
-	// В функции handleSubmit в TrackForm.tsx
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
+	const onFinish = async (values: { trackName: string }) => {
+		const { trackName } = values
 
 		if (!trackName || !audioFile) {
 			console.error('Track name and audio file are required')
@@ -27,8 +18,8 @@ const TrackForm: React.FC<TrackFormProps> = () => {
 		}
 
 		const formData = new FormData()
-		formData.append('title', trackName) // Изменили на 'title'
-		formData.append('audio', audioFile) // Не изменяем, так как это соответствует ожидаемому на бэкенде
+		formData.append('title', trackName)
+		formData.append('audio', audioFile)
 
 		try {
 			await axios.post('http://localhost:3000/files', formData, {
@@ -36,35 +27,54 @@ const TrackForm: React.FC<TrackFormProps> = () => {
 					'Content-Type': 'multipart/form-data'
 				}
 			})
-			// Операции после успешной отправки запроса
-			console.log('Track created successfully')
+			message.success('Track created successfully')
+			form.resetFields()
+			setAudioFile(null)
+			window.location.reload()
 		} catch (error) {
 			console.error('Error creating track:', error)
+			message.error('Error creating track')
 		}
 	}
 
+	const normFile = (e: any) => {
+		if (Array.isArray(e)) {
+			return e
+		}
+		return e && e.fileList
+	}
+
+	const beforeUpload = (file: File) => {
+		setAudioFile(file)
+		return false
+	}
+
 	return (
-		<form onSubmit={handleSubmit}>
-			<div>
-				<label htmlFor='trackName'>Track Name:</label>
-				<input
-					type='text'
-					id='trackName'
-					value={trackName}
-					onChange={handleNameChange}
-				/>
-			</div>
-			<div>
-				<label htmlFor='audioFile'>Audio File:</label>
-				<input
-					type='file'
-					id='audioFile'
-					accept='audio/*'
-					onChange={handleFileChange}
-				/>
-			</div>
-			<button type='submit'>Create Track</button>
-		</form>
+		<Form form={form} onFinish={onFinish} className={styles.form}>
+			<Form.Item
+				label='Track Name'
+				name='trackName'
+				rules={[{ required: true, message: 'Please input track name!' }]}
+			>
+				<Input />
+			</Form.Item>
+			<Form.Item
+				label='Audio File'
+				name='audioFile'
+				valuePropName='fileList'
+				getValueFromEvent={normFile}
+				rules={[{ required: true, message: 'Please select an audio file!' }]}
+			>
+				<Upload beforeUpload={beforeUpload} accept='audio/*'>
+					<Button icon={<UploadOutlined />}>Select Audio File</Button>
+				</Upload>
+			</Form.Item>
+			<Form.Item>
+				<Button type='primary' htmlType='submit'>
+					Create Track
+				</Button>
+			</Form.Item>
+		</Form>
 	)
 }
 
