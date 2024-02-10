@@ -11,9 +11,10 @@ import s from './AudioPlayer.module.scss'
 interface AudioPlayerProps {
 	src: string
 	previewImage: string
+	title: string
 }
 
-const AudioPlayer: FC<AudioPlayerProps> = ({ src, previewImage }) => {
+const AudioPlayer: FC<AudioPlayerProps> = ({ src, previewImage, title }) => {
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 	const [isPlaying, setIsPlaying] = useState(false)
 	const [currentTime, setCurrentTime] = useState(0)
@@ -76,6 +77,7 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ src, previewImage }) => {
 
 	return (
 		<div className={s.wrapper}>
+			<h2 className={s.title}>{title}</h2>
 			<img src={previewImage} className={s.preview} alt='Track Preview' />
 			<audio ref={audioRef} src={src}></audio>
 			<div className={s.bottom}>

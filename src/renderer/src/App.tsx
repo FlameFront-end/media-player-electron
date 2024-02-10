@@ -3,14 +3,14 @@ import { Route, Routes } from 'react-router-dom'
 
 import './styles/app.scss'
 
-import Home from './pages/Home'
+import Index from './pages'
 
 const App: FC = () => {
 	return (
 		<>
 			<div className='container'>
 				<Routes>
-					<Route path='/' element={<Home />} />
+					<Route path='/' element={<Index />} />
 				</Routes>
 			</div>
 		</>
