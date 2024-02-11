@@ -1,8 +1,8 @@
 import PageWrapper from './PageWrapper/PageWrapper'
 
 import AudioPlayer from './AudioPlayer/AudioPlayer'
-import Button from './Button/Button'
+import ImageForm from './ImageForm/ImageForm'
 import Navbar from './Navbar/Navbar'
 import TrackForm from './TrackForm/TrackForm'
 
-export { AudioPlayer, Button, Navbar, PageWrapper, TrackForm }
+export { AudioPlayer, Navbar, PageWrapper, TrackForm, ImageForm }

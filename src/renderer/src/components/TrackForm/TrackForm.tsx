@@ -3,36 +3,32 @@ import { Button, Form, Input, message, Upload } from 'antd'
 import axios from 'axios'
 import { FC, useState } from 'react'
 
-import styles from './TrackForm.module.scss'
-
 const TrackForm: FC = () => {
 	const [form] = Form.useForm()
+	const [imageFile, setImageFile] = useState<File | null>(null)
 	const [audioFile, setAudioFile] = useState<File | null>(null)
 
-	const onFinish = async (values: { trackName: string }) => {
-		const { trackName } = values
-
-		if (!trackName || !audioFile) {
-			console.error('Track name and audio file are required')
-			return
-		}
-
+	const onFinish = async (values: any) => {
 		const formData = new FormData()
-		formData.append('title', trackName)
-		formData.append('audio', audioFile)
+		formData.append('image', imageFile as Blob)
+		formData.append('audio', audioFile as Blob)
+		formData.append('title', values.title)
 
 		try {
-			await axios.post('http://localhost:3000/files', formData, {
+			await axios.post('http://localhost:3000/track', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			})
 			message.success('Track created successfully')
+
 			form.resetFields()
+
+			setImageFile(null)
 			setAudioFile(null)
+
 			window.location.reload()
 		} catch (error) {
-			console.error('Error creating track:', error)
 			message.error('Error creating track')
 		}
 	}
@@ -44,29 +40,49 @@ const TrackForm: FC = () => {
 		return e && e.fileList
 	}
 
-	const beforeUpload = (file: File) => {
-		setAudioFile(file)
-		return false
-	}
-
 	return (
-		<Form form={form} onFinish={onFinish} className={styles.form}>
+		<Form form={form} onFinish={onFinish}>
 			<Form.Item
-				label='Track Name'
-				name='trackName'
-				rules={[{ required: true, message: 'Please input track name!' }]}
+				name='title'
+				label='Title'
+				rules={[{ required: true, message: 'Please input track title!' }]}
 			>
 				<Input />
 			</Form.Item>
 			<Form.Item
-				label='Audio File'
-				name='audioFile'
+				name='image'
+				label='Image'
 				valuePropName='fileList'
 				getValueFromEvent={normFile}
-				rules={[{ required: true, message: 'Please select an audio file!' }]}
+				rules={[{ required: true, message: 'Please upload an image!' }]}
 			>
-				<Upload beforeUpload={beforeUpload} accept='audio/*'>
-					<Button icon={<UploadOutlined />}>Select Audio File</Button>
+				<Upload
+					beforeUpload={file => {
+						setImageFile(file)
+						return false
+					}}
+					maxCount={1}
+					listType='picture'
+				>
+					<Button icon={<UploadOutlined />}>Upload Image</Button>
+				</Upload>
+			</Form.Item>
+			<Form.Item
+				name='audio'
+				label='Audio'
+				valuePropName='fileList'
+				getValueFromEvent={normFile}
+				rules={[{ required: true, message: 'Please upload an audio file!' }]}
+			>
+				<Upload
+					beforeUpload={file => {
+						setAudioFile(file)
+						return false
+					}}
+					maxCount={1}
+					listType='text'
+				>
+					<Button icon={<UploadOutlined />}>Upload Audio</Button>
 				</Upload>
 			</Form.Item>
 			<Form.Item>

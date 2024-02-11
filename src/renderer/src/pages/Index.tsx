@@ -2,12 +2,9 @@ import { Col, Row } from 'antd'
 import axios from 'axios'
 import { FC, useEffect, useState } from 'react'
 
-import '../styles/app.scss'
-
 import { AudioPlayer, PageWrapper, TrackForm } from '../components'
 
-import audioImg from '../assets/img.jpg'
-
+import { normalizeURL } from '../helpers/normalizeURL'
 import { Track } from '../types'
 
 const Home: FC = () => {
@@ -16,7 +13,7 @@ const Home: FC = () => {
 	useEffect(() => {
 		const fetchTracks = async () => {
 			try {
-				const response = await axios.get<Track[]>('http://localhost:3000/files')
+				const response = await axios.get('http://localhost:3000/track')
 				setTracks(response.data)
 			} catch (error) {
 				console.error('Error fetching tracks:', error)
@@ -26,25 +23,19 @@ const Home: FC = () => {
 		fetchTracks()
 	}, [])
 
-	const getURLFromAudio = (track: string) => {
-		return `http://localhost:3000/uploads/audio/${track}`
-	}
-
 	return (
 		<PageWrapper>
 			<TrackForm />
 			<div>
 				<h2 className='title'>All Tracks</h2>
-				<Row gutter={[16, 16]}>
+				<Row gutter={[20, 20]}>
 					{tracks.map(track => (
-						<Col key={track.id} xs={24} sm={12} md={8} lg={6}>
-							<div>
-								<AudioPlayer
-									src={getURLFromAudio(track.audio)}
-									previewImage={audioImg}
-									title={track.title}
-								/>
-							</div>
+						<Col key={track.id} xs={4} sm={12} xl={6}>
+							<AudioPlayer
+								src={normalizeURL(track.audio, 'track')}
+								previewImage={normalizeURL(track.image, 'track')}
+								title={track.title}
+							/>
 						</Col>
 					))}
 				</Row>
