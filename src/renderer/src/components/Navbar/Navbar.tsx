@@ -1,6 +1,8 @@
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
 
+import { routes } from '../../routes/AppRoutes'
+
 const { Item } = Menu
 
 const Navbar = () => {
@@ -14,21 +16,13 @@ const Navbar = () => {
 				justifyContent: 'center'
 			}}
 		>
-			<Item key='home'>
-				<Link to='/' style={{ color: 'blue' }}>
-					Home
-				</Link>
-			</Item>
-			<Item key='tracks'>
-				<Link to='/tracks' style={{ color: 'blue' }}>
-					Tracks
-				</Link>
-			</Item>
-			<Item key='images'>
-				<Link to='/images' style={{ color: 'blue' }}>
-					Images
-				</Link>
-			</Item>
+			{routes.map((item, index) => (
+				<Item key={index}>
+					<Link to={item.path} style={{ color: 'blue' }}>
+						{item.title}
+					</Link>
+				</Item>
+			))}
 		</Menu>
 	)
 }
