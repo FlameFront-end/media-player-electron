@@ -1,7 +1,7 @@
-import PageWrapper from './PageWrapper/PageWrapper'
+import PageWrapper from './Forms/PageWrapper/PageWrapper'
 
 import AudioPlayer from './AudioPlayer/AudioPlayer'
-import ImageForm from './ImageForm/ImageForm'
+import ImageForm from './Forms/ImageForm/ImageForm'
 import Navbar from './Navbar/Navbar'
 import TrackForm from './TrackForm/TrackForm'
 

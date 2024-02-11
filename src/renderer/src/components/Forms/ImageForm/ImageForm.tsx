@@ -18,7 +18,7 @@ const ImageForm: FC = () => {
 					'Content-Type': 'multipart/form-data'
 				}
 			})
-			message.success('Image created successfully')
+			message.success('ImagesPage created successfully')
 
 			form.resetFields()
 
@@ -48,7 +48,7 @@ const ImageForm: FC = () => {
 			</Form.Item>
 			<Form.Item
 				name='image'
-				label='Image'
+				label='ImagesPage'
 				valuePropName='fileList'
 				getValueFromEvent={normFile}
 				rules={[{ required: true, message: 'Please upload an image!' }]}

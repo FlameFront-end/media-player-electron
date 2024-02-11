@@ -5,10 +5,10 @@ import { FC, useEffect, useState } from 'react'
 import { AudioPlayer, PageWrapper, TrackForm } from '../components'
 
 import { normalizeURL } from '../helpers/normalizeURL'
-import { Track } from '../types'
+import { ITrackResponse } from '../types'
 
-const Home: FC = () => {
-	const [tracks, setTracks] = useState<Track[]>([])
+const TracksPage: FC = () => {
+	const [tracks, setTracks] = useState<ITrackResponse[]>([])
 
 	useEffect(() => {
 		const fetchTracks = async () => {
@@ -26,22 +26,20 @@ const Home: FC = () => {
 	return (
 		<PageWrapper>
 			<TrackForm />
-			<div>
-				<h2 className='title'>All Tracks</h2>
-				<Row gutter={[20, 20]}>
-					{tracks.map(track => (
-						<Col key={track.id} xs={4} sm={12} xl={6}>
-							<AudioPlayer
-								src={normalizeURL(track.audio, 'track')}
-								previewImage={normalizeURL(track.image, 'track')}
-								title={track.title}
-							/>
-						</Col>
-					))}
-				</Row>
-			</div>
+			<h2 className='title'>All Tracks</h2>
+			<Row gutter={[20, 20]}>
+				{tracks.map(track => (
+					<Col key={track.id} xs={4} sm={12} xl={6}>
+						<AudioPlayer
+							src={normalizeURL(track.audio, 'track')}
+							previewImage={normalizeURL(track.image, 'track')}
+							title={track.title}
+						/>
+					</Col>
+				))}
+			</Row>
 		</PageWrapper>
 	)
 }
 
-export default Home
+export default TracksPage
