@@ -25,6 +25,7 @@
     "antd": "^5.14.0",
     "axios": "^1.6.7",
     "howler": "^2.2.4",
+    "react-player": "^2.14.1",
     "react-router-dom": "^6.21.3",
     "sass": "^1.70.0"
   },

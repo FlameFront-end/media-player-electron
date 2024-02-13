@@ -3,30 +3,30 @@ import { Button, Form, Input, message, Upload } from 'antd'
 import axios from 'axios'
 import { FC, useState } from 'react'
 
-const ImageForm: FC = () => {
+const VideoForm: FC = () => {
 	const [form] = Form.useForm()
-	const [imageFile, setImageFile] = useState<File | null>(null)
+	const [videoFile, setVideoFile] = useState<File | null>(null)
 
 	const onFinish = async (values: any) => {
 		const formData = new FormData()
-		formData.append('image', imageFile as Blob)
 		formData.append('title', values.title)
+		formData.append('video', videoFile as Blob)
 
 		try {
-			await axios.post('http://localhost:3000/image', formData, {
+			await axios.post('http://localhost:3000/video', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			})
-			message.success('Image created successfully')
+			message.success('Video created successfully')
 
 			form.resetFields()
 
-			setImageFile(null)
+			setVideoFile(null)
 
 			window.location.reload()
 		} catch (error) {
-			message.error('Error creating image')
+			message.error('Error creating video')
 		}
 	}
 
@@ -42,35 +42,34 @@ const ImageForm: FC = () => {
 			<Form.Item
 				name='title'
 				label='Title'
-				rules={[{ required: true, message: 'Please input track title!' }]}
+				rules={[{ required: true, message: 'Please input video title!' }]}
 			>
 				<Input />
 			</Form.Item>
 			<Form.Item
-				name='image'
-				label='Images'
+				name='video'
+				label='Video'
 				valuePropName='fileList'
 				getValueFromEvent={normFile}
-				rules={[{ required: true, message: 'Please upload an image!' }]}
+				rules={[{ required: true, message: 'Please upload an video!' }]}
 			>
 				<Upload
 					beforeUpload={file => {
-						setImageFile(file)
+						setVideoFile(file)
 						return false
 					}}
 					maxCount={1}
-					listType='picture'
 				>
-					<Button icon={<UploadOutlined />}>Upload Image</Button>
+					<Button icon={<UploadOutlined />}>Upload Video</Button>
 				</Upload>
 			</Form.Item>
 			<Form.Item>
 				<Button type='primary' htmlType='submit'>
-					Create Image
+					Create Videos
 				</Button>
 			</Form.Item>
 		</Form>
 	)
 }
 
-export default ImageForm
+export default VideoForm

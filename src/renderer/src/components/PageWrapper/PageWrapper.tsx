@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react'
 
 import s from './PageWrapper.module.scss'
 
-import { Navbar } from '../../index'
+import { Navbar } from '../index'
 
 interface PageWrapperProps {
 	children: ReactNode

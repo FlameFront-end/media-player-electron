@@ -13,6 +13,12 @@ export interface IImageResponse {
 	image: string
 }
 
+export interface IVideoResponse {
+	id: number
+	title: string
+	video: string
+}
+
 export interface IRoutes {
 	path: string
 	element: ReactNode
