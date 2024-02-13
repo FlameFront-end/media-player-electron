@@ -51,7 +51,7 @@ const TrackForm: FC = () => {
 			</Form.Item>
 			<Form.Item
 				name='image'
-				label='ImagesPage'
+				label='Image'
 				valuePropName='fileList'
 				getValueFromEvent={normFile}
 				rules={[{ required: true, message: 'Please upload an image!' }]}

@@ -3,8 +3,27 @@
   margin: 0 auto;
 }
 
+.title-cat {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
 .title {
   text-align: center;
   margin-bottom: 20px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete {
+  margin-top: 10px;
+  color: red;
+  font-size: 15px;
 }
 

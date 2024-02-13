@@ -10,9 +10,17 @@ interface AudioPlayerProps {
 	src: string
 	previewImage: string
 	title: string
+	id: number
+	handleDelete: (id: number) => void
 }
 
-const AudioPlayer: FC<AudioPlayerProps> = ({ src, previewImage, title }) => {
+const AudioPlayer: FC<AudioPlayerProps> = ({
+	src,
+	previewImage,
+	title,
+	id,
+	handleDelete
+}) => {
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 	const [isPlaying, setIsPlaying] = useState(false)
 	const [currentTime, setCurrentTime] = useState(0)
@@ -63,7 +71,7 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ src, previewImage, title }) => {
 
 	return (
 		<div className={s.wrapper}>
-			<h2 className={s.title}>{title}</h2>
+			<h2 className='title-cat'>{title}</h2>
 			<Image
 				src={previewImage}
 				className='audio-player-preview'
@@ -102,6 +110,10 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ src, previewImage, title }) => {
 					</div>
 				</div>
 			</div>
+
+			<button className='delete' onClick={() => handleDelete(id)}>
+				Delete
+			</button>
 		</div>
 	)
 }
