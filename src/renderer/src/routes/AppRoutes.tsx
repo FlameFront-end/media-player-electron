@@ -1,12 +1,11 @@
 import { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
-import { HomePage, ImagesPage, TracksPage, VideoPage } from '../pages'
+import { ImagesPage, TracksPage, VideoPage } from '../pages'
 import { IRoutes } from '../types'
 
 export const routes: IRoutes[] = [
-	{ path: '/', element: <HomePage />, title: 'Home' },
-	{ path: '/images', element: <ImagesPage />, title: 'Images' },
+	{ path: '/', element: <ImagesPage />, title: 'Images' },
 	{ path: '/tracks', element: <TracksPage />, title: 'Tracks' },
 	{ path: '/videos', element: <VideoPage />, title: 'Videos' }
 ]
